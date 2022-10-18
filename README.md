@@ -5,4 +5,4 @@ Currently funtional: *Find all .txt files in the designated folder, *display fil
 
   **Notes for current features**: There is a Tkinter askFileDialog method which was not used for finding files but would have been easier. This is since I wanted to learn about finding all files in a directory and the intricacies behind it.   
 
-Currently WIP: *file editing, *additional tools for editing files
+Currently WIP: *file editing(GUI done)(Need functionality), *additional tools for editing files
