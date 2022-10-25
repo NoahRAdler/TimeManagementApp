@@ -62,7 +62,7 @@ else:
             fOpened = open(FILES[index], "r")
 
             for line in fOpened:
-                fileContentsTextArea.insert(END, line + "\n")
+                fileContentsTextArea.insert(END, line)
 
             fOpened.close()
             fileContentsTextArea.config(state = DISABLED) # Make read-only again
@@ -79,7 +79,7 @@ else:
             fOpened = open(FILES[index], "r")
 
             for line in fOpened:
-                textArea.insert(END, line + "\n")
+                textArea.insert(END, line)
 
             fOpened.close()
 
@@ -123,7 +123,8 @@ else:
 
                     APPLY_ACTIVE = 0            # 0 using the bool() method results false, 1 results true
                     WRITE_WINDOWS_OPEN -= 1
-
+                    
+                    showFileContents() # run showFileContents to update the displayed contents
                     editWindow.destroy()
 
             global CURRENT_FILE
@@ -209,10 +210,15 @@ else:
                              fg = "black",
                              bg = "lightBlue")
 
+    # Configure grid for expandable text area
+    Grid.rowconfigure(mainWindow, 2, weight=1)
+    Grid.rowconfigure(mainWindow, 4, weight=1)
+    Grid.columnconfigure(mainWindow, 1, weight=1)
+
     # Assign all widgets to mainWindow grid
     showFilesButton.grid(column = 1, row = 1)
 
-    fileDisplayTextArea.grid(column = 1, row = 2)
+    fileDisplayTextArea.grid(column = 1, row = 2, sticky="nsew")
 
     selectFrame.grid(column = 1, row = 3) # Holds both widgets below that use .pack
 
@@ -222,7 +228,7 @@ else:
 
     editFileButton.pack( side = LEFT )
 
-    fileContentsTextArea.grid(column = 1, row = 4)
+    fileContentsTextArea.grid(column = 1, row = 4, sticky="nsew")
 
 
 
