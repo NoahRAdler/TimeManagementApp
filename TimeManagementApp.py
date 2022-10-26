@@ -1,5 +1,6 @@
 from tkinter import *
 from tkinter import messagebox
+from tkinter import ttk
 import glob
 
 # From current level, find all .txt files in the designated folder for app,
@@ -100,6 +101,9 @@ else:
         else:
             return False
 
+
+
+    #__________________________________________EDIT_WINDOW______________________________________________
     # Open new window to edit file
     def newEditWindow():
         input = fileSelecter.get()
@@ -109,6 +113,7 @@ else:
 
             # When editWindow close event
             def onClosing():
+
                 if messagebox.askokcancel("Exit", "Do you want to exit? Changes will not be saved."):
                     global WRITE_WINDOWS_OPEN
                     WRITE_WINDOWS_OPEN -= 1
@@ -127,6 +132,23 @@ else:
                     showFileContents() # run showFileContents to update the displayed contents
                     editWindow.destroy()
 
+            # Applys given template from comboBox, uses count if within parameters else defaults to 1
+            def insertTemplate():
+
+                # strip may be fine to remove but by no means remove the replace method, 
+                # otherwise (numOfOutputs)input has \n and breaks it
+                numOfOutputs = templateCountInput.get(1.0, END).strip().replace("\n","")
+                template = templateComboBox.get()
+                
+                # Insert takes place at cursor location and 
+                if numOfOutputs.isdigit() and int(numOfOutputs) in range(1, 101): 
+
+                    for x in range(1, int(numOfOutputs)+1):
+                        editingTextArea.insert(editingTextArea.index('insert'), template + "\n")
+                else:
+                    editingTextArea.insert(editingTextArea.index('insert'), template + "\n")
+
+
             global CURRENT_FILE
             CURRENT_FILE = FILES[int(input) - 1]
             editWindow = Toplevel()
@@ -137,32 +159,75 @@ else:
             editWindow.title("Schedule Editing Window")
             editWindow.geometry("1400x600")
 
+            editOptionFrame = Frame(editWindow)
+
             # scrollbar setup
             textScroll = Scrollbar(editWindow, orient=VERTICAL)
-            textScroll.pack(side = RIGHT, fill = Y)
+            
 
             editingTextArea = Text(editWindow,
                                    width = 150,
                                    height = 30,
-                                   yscrollcommand = textScroll.set)
+                                   yscrollcommand = textScroll.set,
+                                   undo = True)
 
-            editingTextArea.pack(side = RIGHT, fill = Y)
 
-            applyEditButton = Button(editWindow,
+            applyEditButton = Button(editOptionFrame,
                                      text = "Apply Changes",
-                                     command = applyingChanges) # Make command for apply changes
-            applyEditButton.pack(side = LEFT)
+                                     command = applyingChanges) 
+
+            # applies template from combo box allowing imput or an option provided in the drop down 
+            insertTemplateButton = Button(editOptionFrame,
+                                         text="Insert Template",
+                                         command=insertTemplate)
+
+            
+            countLabel = Label(editOptionFrame,
+                               text="Number of Inserts, Up to 100" )
+
+            # Controls how many inserts there should be up to 100
+            templateCountInput = Text(editOptionFrame,
+                                      width = 3,
+                                      height = 1)
+
+            textTemplates = [
+                "",
+                "[ ] CheckboxItems",
+                ". NumberedItems: ",
+                "   [ ] ChkBoxWithTab",
+                "   . numItemWithTab"
+                ]
+            # Gives examples for templates also allowing unique input
+            templateComboBox = ttk.Combobox(editOptionFrame, value=textTemplates)
+
+            # Place/pack into main window
+            textScroll.pack(side = RIGHT, fill = Y)
+            editingTextArea.pack(side = RIGHT, fill = Y)
+            editOptionFrame.pack(side = LEFT)
+
+            # Place/pack into options frame
+            applyEditButton.pack(pady=25)
+            insertTemplateButton.pack(pady=10)
+            templateComboBox.pack()
+            countLabel.pack(pady=5)
+            templateCountInput.pack()
 
             # scrollbar config
             textScroll.config(command=editingTextArea.yview)
             showFileContentsRW(editingTextArea)
+
+            # Bind hotkeys for editing
+            editWindow.bind('<Control-KeyPress-Z>', editingTextArea.edit_undo)
+            editWindow.bind('<Control-KeyPress-Y>', editingTextArea.edit_redo)
 
             # Controls exit state of the window
             if(bool(APPLY_ACTIVE)):
                 editWindow.protocol("WM_DELETE_WINDOW", onClosing)
 
 
-    # Main Window
+
+
+    # _________________________________________Main_Window______________________________________________
     mainWindow = Tk()
 
     # mainWindow size
@@ -224,7 +289,7 @@ else:
 
     ShowFile.pack( side = LEFT) # stacks/packs starting left, allows them to be side by side 
 
-    fileSelecter.pack( side = LEFT)
+    fileSelecter.pack( side = LEFT, padx=5)
 
     editFileButton.pack( side = LEFT )
 
