@@ -140,13 +140,27 @@ else:
                 numOfOutputs = templateCountInput.get(1.0, END).strip().replace("\n","")
                 template = templateComboBox.get()
                 
-                # Insert takes place at cursor location and 
-                if numOfOutputs.isdigit() and int(numOfOutputs) in range(1, 101): 
+                # Insert takes place at cursor location
+                if numOfOutputs.isdigit() and int(numOfOutputs) in range(1, 101):
+                    lineSpacing = len(template) - len(template.lstrip())
+                    template = template.strip()
 
-                    for x in range(1, int(numOfOutputs)+1):
-                        editingTextArea.insert(editingTextArea.index('insert'), template + "\n")
+                    if bool(displayCountVarHold.get()):
+                        for x in range(1, int(numOfOutputs)+1):
+                            editingTextArea.insert(editingTextArea.index('insert'), " " * lineSpacing + str(x) + 
+                                                   template + "\n")
+                    else:
+                        for x in range(1, int(numOfOutputs)+1):
+                            editingTextArea.insert(editingTextArea.index('insert'), template + "\n")
                 else:
                     editingTextArea.insert(editingTextArea.index('insert'), template + "\n")
+
+            # allows the comboBox to properly use tab
+            def comboBoxTabFix(event):
+                
+                indexTemp = templateComboBox.index('insert')
+                templateComboBox.insert(indexTemp, " " * 3)
+                templateComboBox.icursor(str(indexTemp) + "3")
 
 
             global CURRENT_FILE
@@ -190,15 +204,25 @@ else:
                                       width = 3,
                                       height = 1)
 
+            # Values for Combo box and Check button
             textTemplates = [
                 "",
                 "[ ] CheckboxItems",
                 ". NumberedItems: ",
-                "   [ ] ChkBoxWithTab",
-                "   . numItemWithTab"
+                "   [ ] ChkBoxWithTab"
                 ]
+
+            displayCountVarHold = IntVar()
+
             # Gives examples for templates also allowing unique input
             templateComboBox = ttk.Combobox(editOptionFrame, value=textTemplates)
+
+            # Controls if a count is displayed in the template
+            displayCountCheck = Checkbutton(editOptionFrame,
+                                            text="Display template count",
+                                            variable = displayCountVarHold,
+                                            offvalue = 0,
+                                            onvalue = 1)
 
             # Place/pack into main window
             textScroll.pack(side = RIGHT, fill = Y)
@@ -209,8 +233,9 @@ else:
             applyEditButton.pack(pady=25)
             insertTemplateButton.pack(pady=10)
             templateComboBox.pack()
-            countLabel.pack(pady=5)
+            countLabel.pack(pady=10)
             templateCountInput.pack()
+            displayCountCheck.pack(pady=10)
 
             # scrollbar config
             textScroll.config(command=editingTextArea.yview)
@@ -219,6 +244,10 @@ else:
             # Bind hotkeys for editing
             editWindow.bind('<Control-KeyPress-Z>', editingTextArea.edit_undo)
             editWindow.bind('<Control-KeyPress-Y>', editingTextArea.edit_redo)
+
+            # Allows use of Tab-Key in comboBox for easier template editing
+            templateComboBox.unbind_all('<<NextWindow>>')
+            templateComboBox.bind('<Tab>', comboBoxTabFix) 
 
             # Controls exit state of the window
             if(bool(APPLY_ACTIVE)):
