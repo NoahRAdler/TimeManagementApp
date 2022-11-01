@@ -13,4 +13,4 @@ Currently WIP: Adding ico/top image to app window(s) and finalizing project
 
 
 
-Future plans: This project may see a future refactoring or a completely new version(as in a branch off), but after adding the ICO(s) and a once-over to clean up the code, this is being left alone for a while. As for closing thoughts, there could have been better use of OOP concepts and more effort to improve ease of use in the app. Despite that, there are quality sections of code, so this can be an ok tkinter reference going forward.  
+Future plans: This project may see a future refactoring or an almost completely new version, but after adding the ICO(s) and a once-over to clean up the code, this is being left alone for a while. As for closing thoughts, there could have been better use of OOP concepts and more effort to improve ease of use in the app. Despite that, there are quality sections of code, so this can be an ok tkinter reference going forward.  
