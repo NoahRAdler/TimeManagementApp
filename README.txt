@@ -5,11 +5,7 @@ Currently funtional: *Find all .txt files in the designated folder, *display fil
 
 
   **Notes for current features**: There is a Tkinter askFileDialog method which was not used for finding files but would have been easier. This is since I wanted to learn about finding all files in a directory and the intricacies behind it. To run the app without the console change the extension from .py to .pyw, also make sure 
-to have a TodoAndReminders folder, which needs to contain at least 1 text file.    
-
-
-Currently WIP: Adding ico/top image to app window(s) and finalizing project
-
+to have a TodoAndReminders folder, which needs to contain at least 1 text file. If you download the .zip everything should be where it needs to.   
 
 
 
