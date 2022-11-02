@@ -10,8 +10,9 @@ WRITE_WINDOWS_OPEN = 0
 CURRENT_FILE = ""
 
 if len(FILES) < 1:
-    messagebox.showerror("No Text Files Error","No text files in TodoAndReminders folder, " 
-                    +  "add at least one then restart the app.")
+    messagebox.showerror("No Text Files Error","No text files in TodoAndReminders folder, or no folder at all. " 
+                    +  "Make sure to have a TodoAndReminders folder with "
+                    +   "at least one .txt file then restart the app.")
 else:
 
     # Displays files to chose from with the associated input for choosing
@@ -69,7 +70,7 @@ else:
             fileContentsTextArea.config(state = DISABLED) # Make read-only again
 
     # Displays contents of file to a selected read/write area
-    # Arg: text area 
+    # Arg: text area Object 
     def showFileContentsRW(textArea): 
         input = fileSelecter.get()
     
@@ -173,6 +174,9 @@ else:
             editWindow.title("Schedule Editing Window")
             editWindow.geometry("1400x600")
 
+            # Set corner Icon
+            editWindow.iconbitmap(r'MoonQM.ico')
+
             editOptionFrame = Frame(editWindow)
 
             # scrollbar setup
@@ -204,7 +208,7 @@ else:
                                       width = 3,
                                       height = 1)
 
-            # Values for Combo box and Check button
+            # Values for Combo box
             textTemplates = [
                 "",
                 "[ ] CheckboxItems",
@@ -212,6 +216,7 @@ else:
                 "   [ ] ChkBoxWithTab"
                 ]
 
+            # CheckButton Value holder
             displayCountVarHold = IntVar()
 
             # Gives examples for templates also allowing unique input
@@ -239,6 +244,8 @@ else:
 
             # scrollbar config
             textScroll.config(command=editingTextArea.yview)
+
+            # When Opening editWindow, this displays the file contents.
             showFileContentsRW(editingTextArea)
 
             # Bind hotkeys for editing
@@ -267,6 +274,9 @@ else:
 
     # titling mainWindow
     mainWindow.title("Time Manager")
+
+    # Set corner Icon
+    mainWindow.iconbitmap(r'MoonQM.ico')
 
     selectFrame = Frame(mainWindow)
 
